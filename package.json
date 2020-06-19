@@ -1,0 +1,25 @@
+{
+  "name": "registrator",
+  "version": "0.0.1",
+  "description": "A Discord bot designed for registering new students into the Nottingham Computer Science Discord server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/thytom/Registrator.git"
+  },
+  "author": "Archie Hilton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thytom/Registrator/issues"
+  },
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "discord.js": "^12.2.0",
+    "fs": "0.0.1-security",
+    "winston": "^3.2.1"
+  },
+  "homepage": "https://github.com/thytom/Registrator#readme"
+}
