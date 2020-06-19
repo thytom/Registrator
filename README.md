@@ -1,6 +1,6 @@
 # Registrar (Name subject to change)
 
-This Discord both is designed to automate the UoN CompSci Discord registering
+This Discord bot is designed to automate the UoN CompSci Discord registering
 process for new students.
 
 Running this bot requires the creation of a file, `auth.json`, containing a
