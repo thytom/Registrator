@@ -1,4 +1,4 @@
-# Registrar (Name subject to change)
+# Registrator (Name subject to change)
 
 This Discord bot is designed to automate the UoN CompSci Discord registering
 process for new students.
