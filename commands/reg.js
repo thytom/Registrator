@@ -1,27 +1,41 @@
-var permissions = require('../register.json');
+var register = require('../register.json');
 
 module.exports = {
 	name: 'register',
 	description: 'Register a user',
-	execute(message, args) {
-		var ID = args[0];
-		user = message.member;
+	async execute(message, args) {
+		const ID = args.join(" ");
+		const user = message.member;
 
-		if(permissions[ID])
-		{
-			namesToAdd = permissions[ID].split(';');
-			console.log(namesToAdd);
-			rolesToAdd = user.guild.roles.cache.filter(r => namesToAdd.includes(r.name));
+		var rolesToAdd = [];		
 
-			console.log(namesToAdd);
+		var nickName;
 
-			user.edit({roles: rolesToAdd});
-			console.log("Updated user " + user.nickname + " permissions to: " + namesToAdd);
-			message.reply("your roles are now: " + namesToAdd);
-		}else
-		{
-			message.reply("sorry, that's not a valid ID!");
-			return;
+		for(const role in register) {
+			const searchArray = register[role].map(name => name.toLowerCase());
+			if(searchArray.includes(ID.toLowerCase())) {
+				if(nickName == undefined)
+					nickName = register[role][searchArray.indexOf(ID.toLowerCase())];
+
+				rolesToAdd.push(role);
+			}
+		}
+
+		if(rolesToAdd.length == 0) {
+			message.reply("sorry, I don't recognise that name. Please make sure you've spelled it correctly, or use `@Mentor` to get a human's attention!");
+		}else {
+			try{
+				await user.edit({roles: user.guild.roles.cache.filter(r =>
+					rolesToAdd.includes(r.name)), nick: nickName});
+
+				console.log("Updated user " + user.nickname + " permissions to: " + rolesToAdd.join(', '));
+				message.reply("your roles are now: " + rolesToAdd.join(', '));
+			}catch (error)
+			{
+				console.error("Unable to edit user: " 
+					+ user.nickname + ":\n ", error);
+				message.reply("something went wrong! Maybe you have more permissions than me?");
+			}
 		}
 	}
 }
