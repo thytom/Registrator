@@ -1,3 +1,5 @@
 {
-	"Example" : "Student;Mentor;Admin"
+	"Student" 	: ["Jane Doe"],
+	"Mentor" 	: ["John Doe"],
+	"Admin" 	: ["John Doe"]
 }
