@@ -15,7 +15,12 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', function (evt) {
-	console.log('Ready.');
+	const guilds = client.guilds.cache.map(x => x.name);
+	var guildList = "";
+	for(const g in guilds) {
+		guildList += `  ${g} - ${guilds[g]}\n`;
+	}
+	console.log('Logged into ' + guilds.length + ' guilds: \n' + guildList);
 });
 
 client.on('message', message => {
