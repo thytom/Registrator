@@ -29,7 +29,7 @@ fs.readFile(fileNameToRead, 'utf8', (err, data) => {
 	if(err){
 		throw `Could not read ${fileNameToRead}.`;
 	} else {
-		fs.writeFile(`${config.encode.defaultOutputFile}`, encodeJSON(data), 'utf8', err => {
+		fs.writeFile(config.encode.registerOutputFile, encodeJSON(data), 'utf8', err => {
 			if (err) throw "Could not write register.json";
 		});
 	}
