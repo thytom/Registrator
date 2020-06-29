@@ -12,15 +12,15 @@ module.exports = {
 
 		var nickName;
 
-		for(const role in register) {
-			const searchArray = register[role].map(name => name.toLowerCase());
+		register.forEach(role => {
+			const searchArray = role.map(name => name.toLowerCase());
 			if(searchArray.includes(ID.toLowerCase())) {
 				if(nickName == undefined)
-					nickName = register[role][searchArray.indexOf(ID.toLowerCase())];
+					nickName = role[searchArray.indexOf(ID.toLowerCase())];
 
 				rolesToAdd.push(role);
 			}
-		}
+		});
 
 		if(rolesToAdd.length == 0) {
 			message.reply("sorry, I don't recognise that name. Please make sure you've spelled it correctly, or use `@Mentor` to get a human's attention!");
