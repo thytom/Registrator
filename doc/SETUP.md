@@ -2,10 +2,10 @@
 
 ## Contents
 
-1. [Creating a Discord Bot](# Creating a Discord Bot)
-2. [Adding an Authorisation Key](# Adding an Authorisation Key)
-3. [Adding a Register](# Adding a Register)
-4. [Installation](# Installation)
+1. [Creating a Discord Bot](#creating-a-discord-bot)
+2. [Adding an Authorisation Key](#adding-an-authorisation-key)
+3. [Adding a Register](#adding-a-register)
+4. [Installation](#installation)
 
 ## Creating a Discord Bot
 
