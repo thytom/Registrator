@@ -1,4 +1,1 @@
-{
-	"Student" 	: ["Jane Doe"],
-	"Mentor" 	: ["John Doe"]
-}
+{"Mentor":["John Doe"],"Student":["John Doe","Jane Doe"]}
