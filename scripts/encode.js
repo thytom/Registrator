@@ -19,25 +19,18 @@ function encodeJSON(fileContents){
 }
 
 const fileNameToRead = (process.argv[2]) ? process.argv[2] : config.encode.defaultRegisterFile;
-const fileNameToWrite = config.encode.registerOutputFile;
 
 if(!fileNameToRead)
 {
-	console.error("No file name passed and config.encode.defaultRegisterFile is not set.");
-	process.exit(1);
+	throw "No filename available";
 }
 
 fs.readFile(fileNameToRead, 'utf8', (err, data) => {
 	if(err){
-		console.error(`Could not read ${fileNameToRead}.`);
-		process.exit(1);
+		throw `Could not read ${fileNameToRead}.`;
 	} else {
-		fs.writeFile(fileNameToWrite, encodeJSON(data), 'utf8', err => {
-			if(err)
-			{
-				console.error("Could not write register.json");
-				console.exit(1);
-			}
+		fs.writeFile(`${config.encode.defaultOutputFile}`, encodeJSON(data), 'utf8', err => {
+			if (err) throw "Could not write register.json";
 		});
 	}
 });
