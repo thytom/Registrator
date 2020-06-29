@@ -3,7 +3,7 @@
 This Discord bot is designed to automate the UoN CompSci Discord registering
 process for new students.
 
-A basic setup guide is available [here](src/SETUP.md).
+A basic setup guide is available [here](doc/SETUP.md).
 
 ## Current Features/Commands
 
