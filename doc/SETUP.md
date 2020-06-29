@@ -44,7 +44,8 @@ MacOS (using `homebrew`):
 $ brew install node git
 ```
 
-View a full list of download options for nodejs+npm
+If you're on anything else, you probably know what you're doing. View a full
+list of download options for nodejs+npm
 [here](https://nodejs.org/en/download/package-manager) and git install wizards
 [here](https://git-scm.com/downloads).
 
