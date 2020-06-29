@@ -3,22 +3,16 @@ const config = require('../src/config/config.json');
 
 // Line format = FIRSTNAME LASTNAME GROUP1 GROUP2 ...
 function encodeJSON(fileContents){
-	const lines = fileContents.split('\n');
-	// console.log(lines);
 	var groups = {};
 
-	lines.forEach(line => {
-		const tokens = line.split(' ');
-		const firstName = tokens[0];
-		const lastName = tokens[1]; 
-		for(var i = 2; i < tokens.length; i++)
-		{
-			if(groups[tokens[i]])
-				groups[tokens[i]].push(firstName + ' ' + lastName);
-			else {
-				groups[tokens[i]] = [(firstName + ' ' + lastName)];
-			}
-		}
+	fileContents.split('\n').forEach(line => {
+		var tokens = line.split(' ');
+		const name = `${tokens.shift()} ${tokens.shift()}`;
+		tokens.forEach(token => {
+			groups[token] === undefined ? 
+				groups[token] = [(name)]:
+				groups[token].push(name);
+		});
 	});
 
 	return JSON.stringify(groups);
