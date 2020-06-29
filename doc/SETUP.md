@@ -2,12 +2,51 @@
 
 ## Contents
 
-1. [Download the Repo](#download-the-repo)
-2. [Creating a Discord Bot](#creating-a-discord-bot)
-3. [Inviting the Bot to Your Server](#inviting-the-bot-to-your-server)
-4. [Adding an Authorisation Key](#adding-an-authorisation-key)
-5. [Adding a Register](#adding-a-register)
-6. [Installation](#installation)
+1. [Prerequisites](#prerequisites)
+2. [Download the Repo](#download-the-repo)
+3. [Creating a Discord Bot](#creating-a-discord-bot)
+4. [Inviting the Bot to Your Server](#inviting-the-bot-to-your-server)
+5. [Adding an Authorisation Key](#adding-an-authorisation-key)
+6. [Adding a Register](#adding-a-register)
+7. [Installation](#installation)
+
+## Prerequisites
+
+To install and run this bot, you will need:
+
+* `nodejs`
+* `npm`
+* `git`
+
+Install these using your favourite package manager:
+
+Arch-based:
+```
+$ sudo pacman -S nodejs npm git
+```
+
+Debian-based:
+```
+$ sudo apt install nodejs npm git
+```
+
+Windows (Using `chocolatey` or `scoop`):
+
+```
+$ cinst nodejs.install git
+# or
+$ scoop install nodejs git
+```
+
+MacOS (using `homebrew`):
+
+```
+$ brew install node git
+```
+
+View a full list of download options for nodejs+npm
+[here](https://nodejs.org/en/download/package-manager) and git install wizards
+[here](https://git-scm.com/downloads).
 
 ## Download the Repo
 
