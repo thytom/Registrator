@@ -28,7 +28,7 @@ const fileNameToRead = process.argv[2];
 if(!fileNameToRead)
 {
 	console.error("No arguments passed.");
-	console.exit(1);
+	process.exit(1);
 }
 
 fs.readFile(fileNameToRead, 'utf8', (err, data) => {
