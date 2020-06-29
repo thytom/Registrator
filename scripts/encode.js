@@ -1,4 +1,5 @@
 const fs = require('fs');
+const config = require('../src/config/config.json');
 
 // Line format = FIRSTNAME LASTNAME GROUP1 GROUP2 ...
 function encodeJSON(fileContents){
@@ -23,11 +24,12 @@ function encodeJSON(fileContents){
 	return JSON.stringify(groups);
 }
 
-const fileNameToRead = process.argv[2];
+const fileNameToRead = (process.argv[2]) ? process.argv[2] : config.encode.defaultRegisterFile;
+const fileNameToWrite = config.encode.registerOutputFile;
 
 if(!fileNameToRead)
 {
-	console.error("No arguments passed.");
+	console.error("No file name passed and config.encode.defaultRegisterFile is not set.");
 	process.exit(1);
 }
 
@@ -36,7 +38,7 @@ fs.readFile(fileNameToRead, 'utf8', (err, data) => {
 		console.error(`Could not read ${fileNameToRead}.`);
 		process.exit(1);
 	} else {
-		fs.writeFile('register.json', encodeJSON(data), 'utf8', err => {
+		fs.writeFile(fileNameToWrite, encodeJSON(data), 'utf8', err => {
 			if(err)
 			{
 				console.error("Could not write register.json");

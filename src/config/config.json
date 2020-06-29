@@ -1,0 +1,7 @@
+{
+	"prefix" : "!",
+	"encode" : {
+		"defaultRegisterFile" : "register/register.txt",
+		"registerOutputFile" : "register/register.json"
+	}
+}

@@ -4,7 +4,7 @@
   "description": "A Discord bot designed for registering new students into the Nottingham Computer Science Discord server.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "new_register": "node ./scripts/encode.js"
   },
   "repository": {
     "type": "git",
