@@ -3,17 +3,7 @@
 This Discord bot is designed to automate the UoN CompSci Discord registering
 process for new students.
 
-Running this bot requires the creation of a file, `auth.json`, containing a
-discord authentication token. You can get one by making a bot profile through
-the discord developer portal. Example:
-
-```javascript
-{
-	"token" : "alkjh12831ASdbBA1jahsk2j31h1kjajkab2" // Dummy key. Don't try it ;P
-}
-```
-
-_**Without this token, this bot WILL NOT run.**_
+A basic setup guide is available [here](src/SETUP.md).
 
 ## Current Features/Commands
 
