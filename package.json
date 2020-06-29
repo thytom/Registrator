@@ -2,9 +2,10 @@
   "name": "registrator",
   "version": "0.0.1",
   "description": "A Discord bot designed for registering new students into the Nottingham Computer Science Discord server.",
-  "main": "index.js",
+  "main": "./src/app.js",
   "scripts": {
-    "new_register": "node ./scripts/encode.js"
+	"start" : "node ./src/app.js",
+    "new_register" : "node ./scripts/encode.js"
   },
   "repository": {
     "type": "git",

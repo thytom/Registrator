@@ -1,4 +1,5 @@
-var register = require('../register.json');
+const config = require('../config/config.json');
+const register = config.encode.defaultFileName;
 
 module.exports = {
 	name: 'register',
