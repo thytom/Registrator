@@ -104,7 +104,7 @@ Create a file in your cloned repo called `auth.json` in the location
 
 ```javascript
 {
-	"Token" : "NzI3MjIyMjI4OTExMTI4Njg2.Xvosuw.9XyqQN3QT70W3MSFjn8yFiEhzA8"
+	"token" : "NzI3MjIyMjI4OTExMTI4Njg2.Xvosuw.9XyqQN3QT70W3MSFjn8yFiEhzA8"
 }
 ```
 
