@@ -3,19 +3,21 @@ const config = require('../src/config/config.json');
 
 // Line format = FIRSTNAME LASTNAME GROUP1 GROUP2 ...
 function encodeJSON(fileContents){
-	var groups = {};
+	var register = {};
 
-	fileContents.split('\n').forEach(line => {
-		var tokens = line.split(' ');
+	var lines = fileContents.split('\n');
+	for(var i = 0; i < lines.length - 1; i++){
+		var tokens = lines[i].split(' ');
 		const name = `${tokens.shift()} ${tokens.shift()}`;
-		tokens.forEach(token => {
-			groups[token] === undefined ? 
-				groups[token] = [(name)]:
-				groups[token].push(name);
-		});
-	});
+		const roles = tokens;
+		register[i] = {
+			name: name,
+			roles: roles,
+			present: false,
+		};
+	}
 
-	return JSON.stringify(groups);
+	return JSON.stringify(register);
 }
 
 const fileNameToRead = (process.argv[2]) ? process.argv[2] : config.encode.defaultRegisterFile;
