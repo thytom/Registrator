@@ -1,15 +1,15 @@
 const fs = require('fs');
 const config = require('../src/config/config.json');
 
-// Line format = FIRSTNAME LASTNAME GROUP1 GROUP2 ...
+// Line format = FULLNAME|GROUP1 GROUP2 ...
 function encodeJSON(fileContents){
 	var register = {};
 
 	var lines = fileContents.split('\n');
 	for(var i = 0; i < lines.length - 1; i++){
-		var tokens = lines[i].split(' ');
-		const name = `${tokens.shift()} ${tokens.shift()}`;
-		const roles = tokens;
+		var tokens = lines[i].split('|');
+		const name = `${tokens.shift()}`;
+		const roles = tokens.shift().split(" ");
 		register[i] = {
 			name: name,
 			roles: roles,

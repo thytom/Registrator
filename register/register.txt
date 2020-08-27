@@ -1,2 +1,3 @@
-John Doe Mentor Student
-Jane Doe Student
+John Doe|Mentor Student
+Jane Doe|Student
+Beatrice Alice Green|Student
