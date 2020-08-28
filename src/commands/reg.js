@@ -5,23 +5,21 @@ const config = require('../config/config.json');
 module.exports = {
 	name: 'register',
 	description: 'Register a user',
-	async execute(message, args) {
+	async execute(message, userFullNameArray) {
 		const register = require(`../../${config.encode.registerOutputFile}`);
+		const userFullName = userFullNameArray.join(" ");
+		const userAccount = message.member;
 
-		const ID = args.join(" ");
-		const user = message.member;
-
-		// Prevent re-registering	
-		if(user.nickname != null 
+		// Prevent re-registering
+		if(userAccount.nickname != null
 			&& Object.keys(register)
 			.map(p => register[p].name.toLowerCase())
-			.includes(user.nickname.toLowerCase())) {
+			.includes(userAccount.nickname.toLowerCase())) {
 			message.reply("looks like you've already registered!");
 			return;
 		}
 
 		var rolesToAdd = [];		
-		var nickName;
 		var sameName = false; // Used to let the user know if their place is already taken.
 
 		for(p in register) {
@@ -37,7 +35,7 @@ module.exports = {
 						if (err) throw "Could not write register.json:" + err;
 					});
 					break;
-				} else{
+				} else {
 					sameName = true;
 				}
 			}
@@ -52,16 +50,16 @@ module.exports = {
 					+ " Please make sure you've typed it in correctly," 
 					+ " or use `@Mentor` to get a human's attention!");
 			}
-		}else {
+		} else {
 			try{
-				await user.edit({roles: user.guild.roles.cache.filter(r =>
-					rolesToAdd.includes(r.name)), nick: nickName});
+				await userAccount.edit({roles: userAccount.guild.roles.cache.filter(r =>
+					rolesToAdd.includes(r.name)), nick: userFullName});
 
-				console.log("Updated user " + user.nickname + " permissions to: " + rolesToAdd.join(', '));
+				console.log("Updated user " + userAccount.nickname + " permissions to: " + rolesToAdd.join(', '));
 				message.reply("your roles are now: " + rolesToAdd.join(', '));
 			}catch (error) {
 				console.error("Unable to edit user: " 
-					+ user.nickname + ":\n ", error);
+					+ userAccount.nickname + ":\n ", error);
 				message.reply("something went wrong! Maybe you have more permissions than me?");
 			}
 		}
