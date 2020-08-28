@@ -22,14 +22,16 @@ module.exports = {
 		var rolesToAdd = [];		
 		var sameName = false; // Used to let the user know if their place is already taken.
 
-		for(p in register) {
-			const person = register[p];
-			if(person.name.toLowerCase() === ID.toLowerCase()) {
-				if(person.present === false)
-				{
-					person.present = true;
-					nickName = person.name;
-					rolesToAdd = person.roles;
+		/* Find user in JSON file. 
+			If there are two records with the same name, it falls through
+			until it finds one that isn't present.*/
+		for(recordIndex in register) {
+			const record = register[recordIndex];
+
+			if(record.name.toLowerCase() === userFullName.toLowerCase()) {
+				if(record.present === false) {
+					record.present = true;
+					rolesToAdd = record.roles;
 					// Preserve state between runs
 					fs.writeFile(config.encode.registerOutputFile, JSON.stringify(register), 'utf8', err => {
 						if (err) throw "Could not write register.json:" + err;
