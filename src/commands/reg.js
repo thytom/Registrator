@@ -20,7 +20,7 @@ module.exports = {
 		}
 
 		var rolesToAdd = [];		
-		var sameName = false; // Used to let the user know if their place is already taken.
+		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
 		/* Find user in JSON file. 
 			If there are two records with the same name, it falls through
@@ -38,13 +38,13 @@ module.exports = {
 					});
 					break;
 				} else {
-					sameName = true;
+					placeAlreadyTaken = true;
 				}
 			}
 		}
 
 		if(rolesToAdd.length == 0) {
-			if(sameName) {
+			if(placeAlreadyTaken) {
 				message.reply("it looks like everyone with that name has already registered."
 				+ "If you think there's a problem, please use `@Mentor` to get a human's attention!");
 			}else {
