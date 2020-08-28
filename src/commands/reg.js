@@ -9,6 +9,8 @@ module.exports = {
 		const register = require(`../../${config.encode.registerOutputFile}`);
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
+		var rolesToAdd = [];		
+		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
 		// Prevent re-registering
 		if(userAccount.nickname != null
@@ -18,9 +20,6 @@ module.exports = {
 			message.reply("looks like you've already registered!");
 			return;
 		}
-
-		var rolesToAdd = [];		
-		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
 		/* Find user in JSON file. 
 			If there are two records with the same name, it falls through
