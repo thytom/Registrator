@@ -21,13 +21,13 @@ Although the default register files are `register/register.txt` and
 `src/config/config.json`, allowing the bot to switch to another register file
 (useful for having separate ones for staff/mentors and students).
 
-`register.txt` is a space-delimited plaintext file that looks follows this
-format:
+`register.txt` is a plaintext file delimited by the '|' character that 
+follows this format:
 
 ```
-FIRSTNAME LASTNAME Role1 Role2 ...
-John Doe Mentor
-Jane Doe Student
+name|Role1 Role2 ...
+John Doe|Mentor
+Jane Doe|Student tutor-group-01
 ```
 
 This file is intended to be in a format that could be easily exported from a
