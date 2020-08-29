@@ -12,25 +12,14 @@ module.exports = {
 		var rolesToAdd = [];		
 		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
-		/* Find user in JSON file. 
-			If there are two records with the same name, it falls through
-			until it finds one that isn't present.*/
-		for(recordIndex in register) {
-			const record = register[recordIndex];
 
-			if(record.name.toLowerCase() === userFullName.toLowerCase()) {
-				if(record.present === false) {
-					record.present = true;
-					rolesToAdd = record.roles;
-					// Preserve state between runs
-					fs.writeFile(config.encode.registerOutputFile, JSON.stringify(register), 'utf8', err => {
-						if (err) throw "Could not write register.json:" + err;
-					});
-					break;
-				} else {
-					placeAlreadyTaken = true;
-				}
-			}
+		const matchingRecord = getMatchingRecordsInRegister(userFullName, register)
+														.filter(record => record.present == false)[0];
+
+		if(matchingRecord) {
+			markAsPresentOnRegister(matchingRecord, register);
+		} else {
+			// TODO: Error
 		}
 
 		if(rolesToAdd.length == 0) {
@@ -44,8 +33,7 @@ module.exports = {
 			}
 		} else {
 			try{
-				await userAccount.edit({roles: userAccount.guild.roles.cache.filter(r =>
-					rolesToAdd.includes(r.name)), nick: userFullName});
+				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, userFullName);
 
 				console.log("Updated user " + userAccount.nickname + " permissions to: " + rolesToAdd.join(', '));
 				message.reply("your roles are now: " + rolesToAdd.join(', '));
@@ -56,4 +44,34 @@ module.exports = {
 			}
 		}
 	}
+}
+
+function getMatchingRecordsInRegister(userFullName, register) {
+	var recordsToReturn = null; 
+
+	for(recordIndex in register) {
+		const record = register[recordIndex];
+
+		if(record.name.toLowerCase() === userFullName.toLowerCase())
+			recordsToReturn.push(record);
+	}
+
+	return recordsToReturn;
+}
+
+function markAsPresentOnRegister(record, register) {
+	register[record].present = true;
+
+	fs.writeFile(config.encode.registerOutputFile, JSON.stringify(register), 'utf8', err => {
+		if (err) throw "Could not write register.json: " + err;
+	});
+}
+
+function updateUserAccountRolesAndNickname(userAccount, rolesToAdd, newNickName) {
+	await userAccount.edit({
+		/* Only add roles the server actually implements */
+		roles: userAccount.guild.roles.cache
+					.filter(r => rolesToAdd.includes(r.name)), 
+		nick: newNickName
+	});
 }
