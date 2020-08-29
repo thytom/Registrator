@@ -33,7 +33,13 @@ module.exports = {
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
 
-		if(userAccount.nickname) {
+		if (message.channel.name != config.register.listenToChannel) {
+			console.error("Attempted use from wrong channel"
+				+ `by user ${userAccount.nickname}: ` 
+				+ message.content);
+			return;
+
+		} else if(userAccount.nickname) {
 			message.reply(responses.nicknameSet);
 			console.error(`User "${userAccount.user.username}"`
 				+ " attempted to register as " + `"${userFullName}"`
@@ -79,10 +85,7 @@ function getFirstAbsentMatchFromRegister(userFullName, register) {
 		.filter(record => record.present == false);
 
 	if(matchingRecords.length == 0)
-	{
-		console.log("Ha");
 		return matchingRecordError.notOnRegister;
-	}
 	else if(matchingNonPresentRecords.length == 0)
 		return matchingRecordError.alreadyRegistered;
 	else

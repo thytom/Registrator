@@ -3,5 +3,9 @@
 	"encode" : {
 		"defaultRegisterFile" : "register/register.txt",
 		"registerOutputFile" : "register/register.json"
+	},
+	"register" : {
+		"listenToChannel" : "foyer",
+		"mentorChannel" : "mentor-room"
 	}
 }
