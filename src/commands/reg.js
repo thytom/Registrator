@@ -2,6 +2,19 @@ const fs = require('fs');
 
 const config = require('../config/config.json');
 
+/* All are prepended with "@User, " */
+const responses = {
+	alreadyRegistered: "is looks like everyone with that name has already registered."
+		+ " If you think there's a problem, please use `@Mentor` to get a human's attention!",
+
+	notOnRegister: "sorry, I don't recognise that name."	
+		+ " Please make sure you've typed it in correctly,"
+		+ " or use `@Mentor` to get a human's attention!",
+
+	somethingWentWrong: "sorry, something went wrong. Please use `@Mentor` to"
+		+ " be let in manually while we try and solve the problem."
+};
+
 module.exports = {
 	name: 'register',
 	description: 'Register a user',
@@ -24,12 +37,9 @@ module.exports = {
 
 		if(rolesToAdd.length == 0) {
 			if(placeAlreadyTaken) {
-				message.reply("it looks like everyone with that name has already registered."
-				+ "If you think there's a problem, please use `@Mentor` to get a human's attention!");
+				message.reply(responses.alreadyRegistered);
 			}else {
-				message.reply("sorry, I don't recognise that name."
-					+ " Please make sure you've typed it in correctly," 
-					+ " or use `@Mentor` to get a human's attention!");
+				message.reply(notOnRegister);
 			}
 		} else {
 			try{
