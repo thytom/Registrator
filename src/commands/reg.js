@@ -13,11 +13,11 @@ const responses = {
 	alreadyRegistered: "is looks like everyone with that name has already registered."
 		+ " If you think there's a problem, please use `@Mentor` to get a human's attention!",
 
-	notOnRegister: "sorry, I don't recognise that name."	
+	notOnRegister: "sorry, I don't recognise that name."
 		+ " Please make sure you've typed it in correctly,"
 		+ " or use `@Mentor` to get a human's attention!",
 
-	nicknameSet : "sorry, it appears that you might already be registered."
+	nicknameSet: "sorry, it appears that you might already be registered."
 		+ " If you think this is a mistake, please get the attention of a human by typing"
 		+ " `@Mentor`.",
 
@@ -33,13 +33,13 @@ module.exports = {
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
 
-		if (message.channel.name != config.register.listenToChannel) {
+		if (message.channel.name !== config.register.listenToChannel) {
 			console.error("Attempted use from wrong channel"
-				+ `by user ${userAccount.nickname}: ` 
+				+ `by user ${userAccount.nickname}: `
 				+ message.content);
 			return;
 
-		} else if(userAccount.nickname) {
+		} else if (userAccount.nickname) {
 			message.reply(responses.nicknameSet);
 			console.error(`User "${userAccount.user.username}"`
 				+ " attempted to register as " + `"${userFullName}"`
@@ -50,30 +50,32 @@ module.exports = {
 		/* Can be a record, can also be an error */
 		const matchingRecord = getFirstAbsentMatchFromRegister(userFullName, register);
 
-		try{
-			if(matchingRecord) {
+		try {
+			if (matchingRecord) {
+				// Valid roles to add to user
 				const rolesToAdd = validateRoles(userAccount, matchingRecord.roles);
 
 				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, matchingRecord.name);
+
 				markAsPresentOnRegister(matchingRecord, register);
-				console.log("Updated user " + userAccount.nickname 
+				console.log("Updated user " + userAccount.nickname
 					+ " permissions to: " + rolesToAdd.map(role => role.name).join(', '));
 				notifyMentors(message, matchingRecord.name);
 
-			} else if(matchingRecord === matchingRecordError.alreadyRegistered){
+			} else if (matchingRecord === matchingRecordError.alreadyRegistered) {
 				message.reply(responses.alreadyRegistered);
 				console.error(`User "${userAccount.user.username}"`
 					+ " attempted to register as " + `"${userFullName}"`
 					+ " but is already present, cannot re-register.");
 
-			} else if(matchingRecord === matchingRecordError.notOnRegister) {
+			} else if (matchingRecord === matchingRecordError.notOnRegister) {
 				message.reply(responses.notOnRegister);
 				console.error(`User "${userAccount.user.username}"`
 					+ " attempted to register as " + `"${userFullName}"`
 					+ " but was not found on the register.");
 			}
-		}catch (err) {
-			console.error("Unable to edit user " 
+		} catch (err) {
+			console.error("Unable to edit user "
 				+ userAccount.nickname + ":\n ", err);
 			message.reply(responses.somethingWentWrong);
 		}
@@ -83,23 +85,23 @@ module.exports = {
 function getFirstAbsentMatchFromRegister(userFullName, register) {
 	const matchingRecords = getMatchingRecordsInRegister(userFullName, register);
 	const matchingNonPresentRecords = matchingRecords
-		.filter(record => record.present == false);
+		.filter(record => record.present === false);
 
-	if(matchingRecords.length == 0)
+	if (matchingRecords.length === 0)
 		return matchingRecordError.notOnRegister;
-	else if(matchingNonPresentRecords.length == 0)
+	else if (matchingNonPresentRecords.length === 0)
 		return matchingRecordError.alreadyRegistered;
 	else
 		return matchingNonPresentRecords[0];
 }
 
 function getMatchingRecordsInRegister(userFullName, register) {
-	var recordsToReturn = []; 
+	var recordsToReturn = [];
 
-	for(recordIndex in register) {
+	for (recordIndex in register) {
 		const record = register[recordIndex];
 
-		if(record.name.toLowerCase() === userFullName.toLowerCase())
+		if (record.name.toLowerCase() === userFullName.toLowerCase())
 			recordsToReturn.push(record);
 	}
 
@@ -121,41 +123,45 @@ function updateUserAccountRolesAndNickname(userAccount, rolesToAdd, newNickName)
 	});
 }
 
+/**
+ * Filters and warns about invalid roles
+ * @param userAccount
+ * @param rolesToAdd
+ * @returns Valid roles
+ */
 function validateRoles(userAccount, rolesToAdd) {
 	const serverRoles = userAccount.guild.roles.cache;
-	var invalidRoles = getInvalidRoles(serverRoles, rolesToAdd);
+	let invalidRoles = getInvalidRoles(serverRoles, rolesToAdd);
 
-	if(invalidRoles.length > 0)
+	if (invalidRoles.length > 0)
 		warnAboutInvalidRoles(userAccount, invalidRoles);
 
 	const validRolesToAdd = rolesToAdd.filter(role => !invalidRoles.includes(role));
-	const validRolesToAddAsObjects = serverRoles
-			.filter(roleObject => validRolesToAdd.includes(roleObject.name));
-
-	return validRolesToAddAsObjects;
+	return serverRoles
+		.filter(roleObject => validRolesToAdd.includes(roleObject.name));
 }
 
-function getInvalidRoles (serverRoles, rolesToAdd) {
+function getInvalidRoles(serverRoles, rolesToAdd) {
 	const serverRoleNames = serverRoles.map(role => role.name);
-	const invalidRoles = rolesToAdd.filter(role => serverRoleNames.includes(role) == false);
+	const invalidRoles = rolesToAdd.filter(role => serverRoleNames.includes(role) === false);
 
 	return invalidRoles;
 }
 
 function warnAboutInvalidRoles(userAccount, invalidRoles) {
-	console.error("WARNING: The following roles are NOT IMPLEMENTED in the target server " 
+	console.error("WARNING: The following roles are NOT IMPLEMENTED in the target server "
 		+ `"${userAccount.guild.name}"`
-		+ 	" and so cannot be added to the user "
+		+ " and so cannot be added to the user "
 		+ `"${userAccount.user.username}": `
 		+ invalidRoles);
 }
 
 function notifyMentors(message, name) {
 	const mentorChannel = message.guild.channels.cache
-		.find(channel => channel.name == config.register.mentorChannel)	
+		.find(channel => channel.name === config.register.mentorChannel)
 
 	const mentorRoleID = message.guild.roles.cache
-		.find(role => role.name == config.register.mentorRole).id
+		.find(role => role.name === config.register.mentorRole).id
 
 	mentorChannel.send(`Please could a <@&${mentorRoleID}> give a warm welcome to `
 		+ name + ", thank you!");
