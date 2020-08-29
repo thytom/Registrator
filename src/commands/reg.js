@@ -2,6 +2,12 @@ const fs = require('fs');
 
 const config = require('../config/config.json');
 
+/* Readable definitions for matchingRecord errors */
+const matchingRecordError = {
+	alreadyRegistered: undefined,
+	notOnRegister: null
+};
+
 /* All are prepended with "@User, " */
 const responses = {
 	alreadyRegistered: "is looks like everyone with that name has already registered."
@@ -23,19 +29,21 @@ module.exports = {
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
 
-		const matchingRecord = getMatchingNonPresentRecordIfExists(userFullName, register);
+		/* Can be a record, can also be an error */
+		const matchingRecord = getFirstAbsentMatchFromRegister(userFullName, register);
 
 		try{
 			if(matchingRecord) {
 				markAsPresentOnRegister(matchingRecord, register);
 				updateUserAccountRolesAndNickname(userAccount, matchingRecord.roles, userFullName);
-				console.log("Updated user " + userAccount.nickname + " permissions to: " + matchingRecord.roles.join(', '));
+				console.log("Updated user " + userAccount.nickname 
+					+ " permissions to: " + matchingRecord.roles.join(', '));
 
-			} else if(matchingRecord == undefined){
+			} else if(matchingRecord == matchingRecordError.alreadyRegistered){
 				message.reply(responses.alreadyRegistered);
 				console.error("User " + userAccount.user.username + " already present, cannot re-register.");
 
-			} else if(matchingRecord == null) {
+			} else if(matchingRecord == matchingRecordError.notOnRegister) {
 				message.reply(responses.notOnRegister);
 				console.error("User " + userAccount.user.username + " not found on the register.");
 			}
@@ -47,18 +55,17 @@ module.exports = {
 	}
 }
 
-/* Returns:
-null - no records found
-undefined - records found but all already present
-record object - record found and not present */
-function getMatchingNonPresentRecordIfExists(userFullName, register) {
-	var recordToReturn = null;
+function getFirstAbsentMatchFromRegister(userFullName, register) {
 	const matchingRecords = getMatchingRecordsInRegister(userFullName, register);
+	const matchingNonPresentRecords = matchingRecords
+		.filter(record => record.present == false);
 
-	if(matchingRecords.length > 0)
-		recordToReturn = matchingRecords.filter(record => record.present == false)[0];
-
-	return recordToReturn;
+	if(matchingRecords.length == 0)
+		return matchingRecordError.notOnRegister;
+	else if(matchingNonPresentRecords.length == 0)
+		return matchingRecordError.alreadyRegistered;
+	else
+		return matchingNonPresentRecord[0];
 }
 
 function getMatchingRecordsInRegister(userFullName, register) {
