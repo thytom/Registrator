@@ -18,7 +18,7 @@ const responses = {
 module.exports = {
 	name: 'register',
 	description: 'Register a user',
-	async execute(message, userFullNameArray) {
+	execute(message, userFullNameArray) {
 		const register = require(`../../${config.encode.registerOutputFile}`);
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
@@ -83,7 +83,7 @@ function markAsPresentOnRegister(record, register) {
 }
 
 function updateUserAccountRolesAndNickname(userAccount, rolesToAdd, newNickName) {
-	await userAccount.edit({
+	userAccount.edit({
 		/* Only add roles the server actually implements */
 		roles: userAccount.guild.roles.cache
 					.filter(r => rolesToAdd.includes(r.name)), 
