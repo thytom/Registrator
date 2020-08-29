@@ -52,7 +52,7 @@ null - no records found
 undefined - records found but all already present
 record object - record found and not present */
 function getMatchingNonPresentRecordIfExists(userFullName, register) {
-	const recordToReturn = null;
+	var recordToReturn = null;
 	const matchingRecords = getMatchingRecordsInRegister(userFullName, register);
 
 	if(matchingRecords.length > 0)
