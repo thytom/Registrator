@@ -17,6 +17,10 @@ const responses = {
 		+ " Please make sure you've typed it in correctly,"
 		+ " or use `@Mentor` to get a human's attention!",
 
+	nicknameSet : "sorry, it appears that you might already be registered."
+		+ " If you think this is a mistake, please get the attention of a human by typing"
+		+ " `@Mentor`.",
+
 	somethingWentWrong: "sorry, something went wrong. Please use `@Mentor` to"
 		+ " be let in manually while we try and solve the problem."
 };
@@ -28,6 +32,14 @@ module.exports = {
 		const register = require(`../../${config.encode.registerOutputFile}`);
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
+
+		if(userAccount.nickname) {
+			message.reply(responses.nicknameSet);
+			console.error(`User "${userAccount.user.username}"`
+				+ " attempted to register as " + `"${userFullName}"`
+				+ ` but their nickname is already set to "${userAccount.nickname}"`);
+			return;
+		}
 
 		/* Can be a record, can also be an error */
 		const matchingRecord = getFirstAbsentMatchFromRegister(userFullName, register);
