@@ -34,21 +34,27 @@ module.exports = {
 
 		try{
 			if(matchingRecord) {
+				const rolesToAdd = validateRoles(userAccount, matchingRecord.roles);
+
+				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, userFullName);
 				markAsPresentOnRegister(matchingRecord, register);
-				updateUserAccountRolesAndNickname(userAccount, matchingRecord.roles, userFullName);
 				console.log("Updated user " + userAccount.nickname 
-					+ " permissions to: " + matchingRecord.roles.join(', '));
+					+ " permissions to: " + rolesToAdd.map(role => role.name).join(', '));
 
-			} else if(matchingRecord == matchingRecordError.alreadyRegistered){
+			} else if(matchingRecord === matchingRecordError.alreadyRegistered){
 				message.reply(responses.alreadyRegistered);
-				console.error("User " + userAccount.user.username + " already present, cannot re-register.");
+				console.error(`User "${userAccount.user.username}"`
+					+ " attempted to register as " + `"${userFullName}"`
+					+ " but is already present, cannot re-register.");
 
-			} else if(matchingRecord == matchingRecordError.notOnRegister) {
+			} else if(matchingRecord === matchingRecordError.notOnRegister) {
 				message.reply(responses.notOnRegister);
-				console.error("User " + userAccount.user.username + " not found on the register.");
+				console.error(`User "${userAccount.user.username}"`
+					+ " attempted to register as " + `"${userFullName}"`
+					+ " but was not found on the register.");
 			}
 		}catch (err) {
-			console.error("Unable to edit user: " 
+			console.error("Unable to edit user " 
 				+ userAccount.nickname + ":\n ", err);
 			message.reply(responses.somethingWentWrong);
 		}
@@ -61,11 +67,14 @@ function getFirstAbsentMatchFromRegister(userFullName, register) {
 		.filter(record => record.present == false);
 
 	if(matchingRecords.length == 0)
+	{
+		console.log("Ha");
 		return matchingRecordError.notOnRegister;
+	}
 	else if(matchingNonPresentRecords.length == 0)
 		return matchingRecordError.alreadyRegistered;
 	else
-		return matchingNonPresentRecord[0];
+		return matchingNonPresentRecords[0];
 }
 
 function getMatchingRecordsInRegister(userFullName, register) {
@@ -91,9 +100,36 @@ function markAsPresentOnRegister(record, register) {
 
 function updateUserAccountRolesAndNickname(userAccount, rolesToAdd, newNickName) {
 	userAccount.edit({
-		/* Only add roles the server actually implements */
-		roles: userAccount.guild.roles.cache
-					.filter(r => rolesToAdd.includes(r.name)), 
+		roles: rolesToAdd,
 		nick: newNickName
 	});
+}
+
+function validateRoles(userAccount, rolesToAdd) {
+	const serverRoles = userAccount.guild.roles.cache;
+	var invalidRoles = getInvalidRoles(serverRoles, rolesToAdd);
+
+	if(invalidRoles.length > 0)
+		warnAboutInvalidRoles(userAccount, invalidRoles);
+
+	const validRolesToAdd = rolesToAdd.filter(role => !invalidRoles.includes(role));
+	const validRolesToAddAsObjects = serverRoles
+			.filter(roleObject => validRolesToAdd.includes(roleObject.name));
+
+	return validRolesToAddAsObjects;
+}
+
+function getInvalidRoles (serverRoles, rolesToAdd) {
+	const serverRoleNames = serverRoles.map(role => role.name);
+	const invalidRoles = rolesToAdd.filter(role => serverRoleNames.includes(role) == false);
+
+	return invalidRoles;
+}
+
+function warnAboutInvalidRoles(userAccount, invalidRoles) {
+	console.error("WARNING: The following roles are NOT IMPLEMENTED in the target server " 
+		+ `"${userAccount.guild.name}"`
+		+ 	" and so cannot be added to the user "
+		+ `"${userAccount.user.username}": `
+		+ invalidRoles);
 }
