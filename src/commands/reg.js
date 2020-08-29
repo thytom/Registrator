@@ -29,20 +29,20 @@ module.exports = {
 			if(matchingRecord) {
 				markAsPresentOnRegister(matchingRecord, register);
 				updateUserAccountRolesAndNickname(userAccount, matchingRecord.roles, userFullName);
-				console.log("Updated user " + userAccount.nickname + " permissions to: " + rolesToAdd.join(', '));
+				console.log("Updated user " + userAccount.nickname + " permissions to: " + matchingRecord.roles.join(', '));
 
 			} else if(matchingRecord == undefined){
-				message.reply(alreadyRegistered);
-				console.error("User " + userAccount.nickname + " already present, cannot re-register.");
+				message.reply(responses.alreadyRegistered);
+				console.error("User " + userAccount.user.username + " already present, cannot re-register.");
 
 			} else if(matchingRecord == null) {
-				message.reply(notOnRegister);
-				console.error("User " + userAccount.nickname + " not found on the register.");
+				message.reply(responses.notOnRegister);
+				console.error("User " + userAccount.user.username + " not found on the register.");
 			}
 		}catch (err) {
 			console.error("Unable to edit user: " 
 				+ userAccount.nickname + ":\n ", err);
-			message.reply("something went wrong! Maybe you have more permissions than me?");
+			message.reply(responses.somethingWentWrong);
 		}
 	}
 }
@@ -75,7 +75,7 @@ function getMatchingRecordsInRegister(userFullName, register) {
 }
 
 function markAsPresentOnRegister(record, register) {
-	register[record].present = true;
+	record.present = true;
 
 	fs.writeFile(config.encode.registerOutputFile, JSON.stringify(register), 'utf8', err => {
 		if (err) throw "Could not write register.json: " + err;
