@@ -22,42 +22,49 @@ module.exports = {
 		const register = require(`../../${config.encode.registerOutputFile}`);
 		const userFullName = userFullNameArray.join(" ");
 		const userAccount = message.member;
-		var rolesToAdd = [];		
-		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
+		const matchingRecord = getMatchingNonPresentRecordIfExists(userFullName, register);
 
-		const matchingRecord = getMatchingRecordsInRegister(userFullName, register)
-														.filter(record => record.present == false)[0];
-
-		if(matchingRecord) {
-			markAsPresentOnRegister(matchingRecord, register);
-		} else {
-			// TODO: Error
-		}
-
-		if(rolesToAdd.length == 0) {
-			if(placeAlreadyTaken) {
-				message.reply(responses.alreadyRegistered);
-			}else {
-				message.reply(notOnRegister);
-			}
-		} else {
-			try{
-				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, userFullName);
+		try{
+			if(matchingRecord) {
+				markAsPresentOnRegister(matchingRecord, register);
+				updateUserAccountRolesAndNickname(userAccount, matchingRecord.roles, userFullName);
 
 				console.log("Updated user " + userAccount.nickname + " permissions to: " + rolesToAdd.join(', '));
 				message.reply("your roles are now: " + rolesToAdd.join(', '));
-			}catch (error) {
-				console.error("Unable to edit user: " 
-					+ userAccount.nickname + ":\n ", error);
-				message.reply("something went wrong! Maybe you have more permissions than me?");
+
+			} else if(matchingRecord == undefined){
+				message.reply(alreadyRegistered);
+				console.error("User " + userAccount.nickname + " already present, cannot re-register.");
+
+			} else if(matchingRecord == null) {
+				message.reply(notOnRegister);
+				console.error("User " + userAccount.nickname + " not found on the register.");
 			}
+		}catch (err) {
+			console.error("Unable to edit user: " 
+				+ userAccount.nickname + ":\n ", err);
+			message.reply("something went wrong! Maybe you have more permissions than me?");
 		}
 	}
 }
 
+/* Returns:
+null - no records found
+undefined - records found but all already present
+record object - record found and not present */
+function getMatchingNonPresentRecordIfExists(userFullName, register) {
+	const recordToReturn = null;
+	const matchingRecords = getMatchingRecordsInRegister(userFullName, register);
+
+	if(matchingRecords.length > 0)
+		recordToReturn = matchingRecords.filter(record => record.present == false)[0];
+
+	return recordToReturn;
+}
+
 function getMatchingRecordsInRegister(userFullName, register) {
-	var recordsToReturn = null; 
+	var recordsToReturn = []; 
 
 	for(recordIndex in register) {
 		const record = register[recordIndex];
