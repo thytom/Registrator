@@ -12,15 +12,6 @@ module.exports = {
 		var rolesToAdd = [];		
 		var placeAlreadyTaken = false; // Used to let the user know if their place is already taken.
 
-		// Prevent re-registering
-		if(userAccount.nickname != null
-			&& Object.keys(register)
-			.map(p => register[p].name.toLowerCase())
-			.includes(userAccount.nickname.toLowerCase())) {
-			message.reply("looks like you've already registered!");
-			return;
-		}
-
 		/* Find user in JSON file. 
 			If there are two records with the same name, it falls through
 			until it finds one that isn't present.*/
