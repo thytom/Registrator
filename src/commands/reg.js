@@ -96,9 +96,9 @@ function getFirstAbsentMatchFromRegister(userFullName, register) {
 }
 
 function getMatchingRecordsInRegister(userFullName, register) {
-	var recordsToReturn = [];
+	let recordsToReturn = [];
 
-	for (recordIndex in register) {
+	for (let recordIndex in register) {
 		const record = register[recordIndex];
 
 		if (record.name.toLowerCase() === userFullName.toLowerCase())
@@ -143,9 +143,7 @@ function validateRoles(userAccount, rolesToAdd) {
 
 function getInvalidRoles(serverRoles, rolesToAdd) {
 	const serverRoleNames = serverRoles.map(role => role.name);
-	const invalidRoles = rolesToAdd.filter(role => serverRoleNames.includes(role) === false);
-
-	return invalidRoles;
+	return rolesToAdd.filter(role => serverRoleNames.includes(role) === false);
 }
 
 function warnAboutInvalidRoles(userAccount, invalidRoles) {
