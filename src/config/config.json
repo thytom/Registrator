@@ -5,6 +5,7 @@
 		"registerOutputFile" : "register/register.json"
 	},
 	"register" : {
+		"mentorRole" : "Mentor",
 		"listenToChannel" : "foyer",
 		"mentorChannel" : "mentor-room"
 	}

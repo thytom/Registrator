@@ -54,10 +54,11 @@ module.exports = {
 			if(matchingRecord) {
 				const rolesToAdd = validateRoles(userAccount, matchingRecord.roles);
 
-				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, userFullName);
+				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, matchingRecord.name);
 				markAsPresentOnRegister(matchingRecord, register);
 				console.log("Updated user " + userAccount.nickname 
 					+ " permissions to: " + rolesToAdd.map(role => role.name).join(', '));
+				notifyMentors(message, matchingRecord.name);
 
 			} else if(matchingRecord === matchingRecordError.alreadyRegistered){
 				message.reply(responses.alreadyRegistered);
@@ -147,4 +148,15 @@ function warnAboutInvalidRoles(userAccount, invalidRoles) {
 		+ 	" and so cannot be added to the user "
 		+ `"${userAccount.user.username}": `
 		+ invalidRoles);
+}
+
+function notifyMentors(message, name) {
+	const mentorChannel = message.guild.channels.cache
+		.find(channel => channel.name == config.register.mentorChannel)	
+
+	const mentorRoleID = message.guild.roles.cache
+		.find(role => role.name == config.register.mentorRole).id
+
+	mentorChannel.send(`Please could a <@&${mentorRoleID}> give a warm welcome to `
+		+ name + ", thank you!");
 }
