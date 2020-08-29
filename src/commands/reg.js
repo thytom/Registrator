@@ -29,9 +29,7 @@ module.exports = {
 			if(matchingRecord) {
 				markAsPresentOnRegister(matchingRecord, register);
 				updateUserAccountRolesAndNickname(userAccount, matchingRecord.roles, userFullName);
-
 				console.log("Updated user " + userAccount.nickname + " permissions to: " + rolesToAdd.join(', '));
-				message.reply("your roles are now: " + rolesToAdd.join(', '));
 
 			} else if(matchingRecord == undefined){
 				message.reply(alreadyRegistered);
