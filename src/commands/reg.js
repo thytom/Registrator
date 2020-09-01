@@ -58,7 +58,7 @@ module.exports = {
 				updateUserAccountRolesAndNickname(userAccount, rolesToAdd, matchingRecord.name);
 
 				markAsPresentOnRegister(matchingRecord, register);
-				console.log("Updated user " + userAccount.nickname
+				console.log("Updated user " + matchingRecord.name
 					+ " permissions to: " + rolesToAdd.map(role => role.name).join(', '));
 				notifyMentors(message, matchingRecord.name);
 
