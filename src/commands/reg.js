@@ -35,7 +35,7 @@ module.exports = {
 
 		if (message.channel.name !== config.register.listenToChannel) {
 			console.error("Attempted use from wrong channel"
-				+ `by user ${userAccount.nickname}: `
+				+ ` by user ${userAccount.nickname}: `
 				+ message.content);
 			return;
 
@@ -60,7 +60,7 @@ module.exports = {
 				markAsPresentOnRegister(matchingRecord, register);
 				console.log("Updated user " + matchingRecord.name
 					+ " permissions to: " + rolesToAdd.map(role => role.name).join(', '));
-				notifyMentors(message, matchingRecord.name);
+				notifyMentors(message, `please could somebody give a warm welcome to ${matchingRecord.name}? Thanks!`);
 
 			} else if (matchingRecord === matchingRecordError.alreadyRegistered) {
 				message.reply(responses.alreadyRegistered);
@@ -73,6 +73,10 @@ module.exports = {
 				console.error(`User "${userAccount.user.username}"`
 					+ " attempted to register as " + `"${userFullName}"`
 					+ " but was not found on the register.");
+			}
+
+			if(!matchingRecord) {
+				notifyMentors(message, `I had some trouble registering the user ${userAccount.user.username} (AKA ${userFullName}). Could somebody please help them? Thank you!`);
 			}
 		} catch (err) {
 			console.error("Unable to edit user "
@@ -154,13 +158,12 @@ function warnAboutInvalidRoles(userAccount, invalidRoles) {
 		+ invalidRoles);
 }
 
-function notifyMentors(message, name) {
-	const mentorChannel = message.guild.channels.cache
+function notifyMentors(messageHandle, messageToSend) {
+	const mentorChannel = messageHandle.guild.channels.cache
 		.find(channel => channel.name === config.register.mentorChannel)
 
-	const mentorRoleID = message.guild.roles.cache
+	const mentorRoleID = messageHandle.guild.roles.cache
 		.find(role => role.name === config.register.mentorRole).id
 
-	mentorChannel.send(`Please could a <@&${mentorRoleID}> give a warm welcome to `
-		+ name + ", thank you!");
+	mentorChannel.send(`Hey <@&${mentorRoleID}>, ${messageToSend}`);
 }
