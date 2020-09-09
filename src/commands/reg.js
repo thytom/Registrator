@@ -10,7 +10,7 @@ const matchingRecordError = {
 
 /* All are prepended with "@User, " */
 const responses = {
-	alreadyRegistered: "is looks like everyone with that name has already registered."
+	alreadyRegistered: "it looks like everyone with that name has already registered."
 		+ " If you think there's a problem, please use `@Mentor` to get a human's attention!",
 
 	notOnRegister: "sorry, I don't recognise that name."
