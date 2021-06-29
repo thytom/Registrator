@@ -9,7 +9,7 @@ function encodeJSON(fileContents){
 	for(var i = 0; i < lines.length - 1; i++){
 		var tokens = lines[i].split('|');
 		const name = `${tokens.shift()}`;
-		const roles = tokens.shift().split(" ");
+		const roles = tokens;
 		register[i] = {
 			name: name,
 			roles: roles,
