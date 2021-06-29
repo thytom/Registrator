@@ -119,12 +119,12 @@ The user register is kept in the `./register` directory. The default plaintext
 register is located at `./register/register.txt`. The file follows this format:
 
 ```
-FIRSTNAME LASTNAME ROLE1 ROLE2 ROLE3
+FULL NAME|ROLE1|ROLE2|ROLE3
 
 E.G:
 
-John Doe Mentor mentor-group-01
-Jane Doe Student mentor-group-01
+John Doe Mentor|mentor-group-01|Student
+Jane Doe Student|mentor-group-01|Student
 ```
 
 This format can easily be exported from a spreadsheet, and can be converted into
